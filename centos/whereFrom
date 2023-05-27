@@ -1,0 +1,10 @@
+#!/bin/bash
+
+LIST=`sudo netstat -natpe | grep 'ESTABLISHED.*sshd' | grep -v '127' | awk '{print $5, $9}' | awk -F '/' '{print $1}' | awk '{print $2, $1}' | awk -F ':' '{print $1}'`
+
+while read line; do
+    pid=`echo $line | awk '{print $1}'`
+    ip=`echo $line | awk '{print $2}'`
+    user=`ps aux | grep $pid | awk -F 'sshd: ' '{print $2}' | awk '{print $1}' | awk /./ | awk -F '@' '{print $1}'`
+    echo -e "$user\t\t$ip"
+done <<< "$LIST"
