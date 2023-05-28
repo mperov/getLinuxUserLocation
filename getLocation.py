@@ -42,14 +42,14 @@ def getInfo(ipAddr = ''):
 
 def show(host = '127.0.0.1', user='root', port=22, filename='/home/coder/.ssh/id_rsa', old=False, console=False, debug=False):
     lines = getTable(host, user, port, filename, old=old)
-    users = []
+    pairs = []
     output=""
     for line in lines:
         user = line.split('\t\t')[0]
         ip = line.split('\t\t')[1].split('\n')[0]
         info=getInfo(ip)
         if info != '':
-            if not user in users:
+            if not (user, ip) in pairs:
                 if len(user) > 15:
                     if console:
                         print('{:<12}\t{:<12}'.format(user, info))
@@ -64,7 +64,7 @@ def show(host = '127.0.0.1', user='root', port=22, filename='/home/coder/.ssh/id
                         if debug:
                             print('{:<12}\t{:<12}'.format(user, info))
                         output += '{:<12}\t\t{:<12}'.format(user, info) + '\n'
-                users.append(user)
+                pairs.append((user, ip))
         time.sleep(SLEEP)
     return output
 
