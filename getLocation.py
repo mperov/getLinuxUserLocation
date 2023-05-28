@@ -50,7 +50,6 @@ def show(host = '127.0.0.1', user='root', port=22, filename='/home/coder/.ssh/id
         info=getInfo(ip)
         if info != '':
             if not user in users:
-                #print(user + '\t\t' + info)
                 if len(user) > 15:
                     if console:
                         print('{:<12}\t{:<12}'.format(user, info))
