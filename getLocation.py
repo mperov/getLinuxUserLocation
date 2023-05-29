@@ -22,8 +22,12 @@ def getTable(host, user, port, filename, old):
             ssh.connect(hostname=host, username=user, pkey=k, port=port)
     except:
         print("ERROR: ssh connection")
-        return []
-    ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('/opt/whereFrom')
+        return ["ERROR: ssh connection"]
+    try:
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('/opt/whereFrom')
+    except:
+        print("ERROR: running /opt/whereFrom")
+        return ["ERROR: running /opt/whereFrom"]
     return ssh_stdout.readlines()
 
 def getInfo(ipAddr = ''):
@@ -40,7 +44,7 @@ def getInfo(ipAddr = ''):
         try:
             return ipAddr + symbols + json_response['country'] + '/' + json_response['city'] + ' - ' + json_response['isp']
         except:
-            return ''
+            return 'Unknown'
     return ''
 
 def show(host = '127.0.0.1', user='root', port=22, filename='/home/coder/.ssh/id_rsa', old=False, console=False, debug=False):
@@ -49,8 +53,14 @@ def show(host = '127.0.0.1', user='root', port=22, filename='/home/coder/.ssh/id
     output=""
     for line in lines:
         user = line.split('\t\t')[0]
-        ip = line.split('\t\t')[1].split('\n')[0]
-        info=getInfo(ip)
+        try:
+            ip = line.split('\t\t')[1].split('\n')[0]
+        except:
+            ip = '0.0.0.0'
+        if line[:6] == "ERROR:":
+            output += line
+            continue
+        info = getInfo(ip)
         if info != '':
             if not (user, ip) in pairs:
                 if len(user) > 15:
