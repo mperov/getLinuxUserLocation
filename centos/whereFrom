@@ -5,6 +5,6 @@ LIST=`sudo netstat -natpe | grep 'ESTABLISHED.*sshd' | grep -v '127' | awk '{pri
 while read line; do
     pid=`echo $line | awk '{print $1}'`
     ip=`echo $line | awk '{print $2}'`
-    user=`ps aux | grep " $pid" | awk -F 'sshd: ' '{print $2}' | awk '{print $1}' | awk /./ | awk -F '@' '{print $1}'`
+    user=`ps aux | awk -v PID="$pid" '$2 == PID' | awk -F 'sshd: ' '{print $2}' | awk '{print $1}' | awk /./ | awk -F '@' '{print $1}'`
     echo -e "$user\t\t$ip"
 done <<< "$LIST"
