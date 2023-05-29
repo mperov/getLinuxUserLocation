@@ -22,7 +22,7 @@ def getTable(host, user, port, filename, old):
             ssh.connect(hostname=host, username=user, pkey=k, port=port)
     except:
         print("ERROR: ssh connection")
-        sys.exit(-1)
+        return []
     ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('/opt/whereFrom')
     return ssh_stdout.readlines()
 
