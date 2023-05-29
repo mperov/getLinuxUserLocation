@@ -9,7 +9,7 @@ import time
 from argparse import ArgumentParser
 
 GEO_IP_API_URL = 'http://ip-api.com/json/'
-SLEEP=2
+SLEEP=3
 
 def getTable(host, user, port, filename, old):
     k = paramiko.RSAKey.from_private_key_file(filename)
