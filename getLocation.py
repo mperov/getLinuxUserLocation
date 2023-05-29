@@ -28,8 +28,11 @@ def getTable(host, user, port, filename, old):
 
 def getInfo(ipAddr = ''):
     if ipAddr != '':
-        req = urllib.request.Request(GEO_IP_API_URL + ipAddr)
-        response = urllib.request.urlopen(req).read()
+        try:
+            req = urllib.request.Request(GEO_IP_API_URL + ipAddr)
+            response = urllib.request.urlopen(req).read()
+        except:
+            return 'Unknown'
         json_response = json.loads(response.decode('utf-8'))
         symbols = ":\t "
         if len(ipAddr) == 15:
